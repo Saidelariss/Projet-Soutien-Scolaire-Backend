@@ -29,11 +29,11 @@ public class PostControllerAPI {
     }
 
     @GetMapping(path = "/savePost")
-    public List<Post> savePost(String titre,String contenu, Apprenti apprenti,Competence competence)
+    public void savePost(String titre,String contenu, Apprenti apprenti,Competence competence)
     {
         Post poste = new Post(null,titre,contenu ,new Date(),apprenti,new ArrayList<Validation>(),competence);
-        List<Post> listePosts = postRepository.findByApprenti(apprenti).orElse(null);
-        return listePosts;
+        postRepository.save(poste);
+
 
     }
     @GetMapping(path = "/postsCompetences")
