@@ -6,7 +6,6 @@ import com.example.demo.entities.Formateur;
 import com.example.demo.entities.Utilisateur;
 import com.example.demo.repositories.CompetenceRepository;
 import com.example.demo.repositories.UtilisateurRepository;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Service;
@@ -21,19 +20,17 @@ public class UserService {
     private UtilisateurRepository utilisateurRepository;
     private CompetenceRepository competenceRepository;
     public Utilisateur UserAuthentication(String email,String password){
-        System.out.println("email : "+email);
-     //   if(!(email.contains("ehtp.ac.ma"))) throw new RuntimeException("Vous n'êtes pas authorisé");
-        Utilisateur utilisateur = utilisateurRepository.findByEmail(email);
 
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(email).orElse(null);
+        if(utilisateur == null) throw new RuntimeException("Le login est erroné");
         if(!(utilisateur.getPassword().equals(password))) throw new RuntimeException("les identifiants sont erronées");
-        System.out.println("email : "+email);
-        return utilisateur;
 
+        return utilisateur;
     }
 
     public Apprenti saveApprenti(Apprenti apprenti){
 
-         return utilisateurRepository.save(apprenti);
+         return (Apprenti) utilisateurRepository.save(apprenti);
 
     }
 
@@ -41,22 +38,19 @@ public class UserService {
         String[] competencesNames = new String[formateur.getCompetences().size()];
         for(int i=0;i<formateur.getCompetences().size();i++){
             competencesNames[i]=formateur.getCompetences().get(i).getNom();
-            System.out.println("-------------------");
-            System.out.println("competence "+competencesNames[i]);
+//
         }
-        List<Competence> competences = new ArrayList<Competence>();
-        for(int i=0;i<competencesNames.length;i++){
-            Competence c = competenceRepository.findByNom(competencesNames[i]);
+        List<Competence> competences = new ArrayList<>();
+        for (String competencesName : competencesNames) {
+            Competence c = competenceRepository.findByNom(competencesName);
             competences.add(c);
         }
         formateur.setCompetences(competences);
 
         for (Competence competence : formateur.getCompetences()){
             competence.getFormateurs().add(formateur);
-            System.out.println("$$$$$$$$$$$$$$competence "+competence.getNom());
         }
-        Formateur savedFormateur = utilisateurRepository.save(formateur);
-        return savedFormateur;
+        return (Formateur) utilisateurRepository.save(formateur);
     }
 
 }

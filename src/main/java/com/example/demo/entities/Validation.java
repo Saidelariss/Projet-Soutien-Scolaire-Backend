@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Data
 public class Validation {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,46 +21,5 @@ public class Validation {
 
     @ManyToOne
     private Post post;
-
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setFormateurAccepte(Boolean formateurAccepte) {
-        this.formateurAccepte = formateurAccepte;
-    }
-
-    public void setApprentiAccepte(Boolean apprentiAccepte) {
-        this.apprentiAccepte = apprentiAccepte;
-    }
-
-    public void setFormateur(Formateur formateur) {
-        this.formateur = formateur;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Boolean getFormateurAccepte() {
-        return formateurAccepte;
-    }
-
-    public Boolean getApprentiAccepte() {
-        return apprentiAccepte;
-    }
-
-    public Formateur getFormateur() {
-        return formateur;
-    }
-
-    public Post getPost() {
-        return post;
-    }
 
 }

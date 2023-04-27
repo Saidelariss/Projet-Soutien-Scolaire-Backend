@@ -1,7 +1,6 @@
 package com.example.demo.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +11,7 @@ import java.util.List;
 
 @Entity
  @AllArgsConstructor @NoArgsConstructor
+@Data
 public class Competence {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,42 +26,11 @@ public class Competence {
             name = "formateur_competence",
             joinColumns = @JoinColumn(name = "competence_id"),
             inverseJoinColumns = @JoinColumn(name = "formateur_id"))
-    private List<Formateur> formateurs = new ArrayList<Formateur>();
+    private List<Formateur> formateurs = new ArrayList<>();
 
 
     @JsonIgnore
     @OneToMany(mappedBy = "competence")
-    private List<Post> posts = new ArrayList<Post>();
+    private List<Post> posts = new ArrayList<>();
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public List<Formateur> getFormateurs() {
-        return formateurs;
-    }
-
-    public List<Post> getPosts() {
-        return posts;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public void setFormateurs(List<Formateur> formateurs) {
-        this.formateurs = formateurs;
-    }
-
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
-    }
 }

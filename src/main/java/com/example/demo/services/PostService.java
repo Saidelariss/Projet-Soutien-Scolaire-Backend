@@ -4,7 +4,6 @@ import com.example.demo.entities.*;
 import com.example.demo.repositories.CompetenceRepository;
 import com.example.demo.repositories.PostRepository;
 import com.example.demo.repositories.UtilisateurRepository;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Service;
@@ -20,30 +19,28 @@ import java.util.List;
 public class PostService {
     PostRepository postRepository;
     UtilisateurRepository utilisateurRepository;
-
     CompetenceRepository competenceRepository;
+
     public Post savePost(Post post, String email,Competence competence){
 
 
-        Apprenti apprenti =(Apprenti) utilisateurRepository.findByEmail(email);
+        Apprenti apprenti =(Apprenti) utilisateurRepository.findByEmail(email).orElse(null);
 
         post.setApprenti(apprenti);
         post.setDatePublication(new Date());
         post.setCompetence(competence);
-        Post savedPost =  postRepository.save(post);
 
-
-        return savedPost;
+        return postRepository.save(post);
     }
     public List<Post> getAllPostsByApprenti(String email){
-        Apprenti apprenti= (Apprenti) utilisateurRepository.findByEmail(email);
+        Apprenti apprenti= (Apprenti) utilisateurRepository.findByEmail(email).orElse(null);
         return apprenti.getPosts();
     }
 
     public List<Post> getAllPostsByFormateur(String email) {
-        Formateur formateur = (Formateur) utilisateurRepository.findByEmail(email);
+        Formateur formateur = (Formateur) utilisateurRepository.findByEmail(email).orElse(null);
         List<Competence> sesCompetences = formateur.getCompetences();
-        List<Post> posts = new ArrayList<Post>();
+        List<Post> posts = new ArrayList<>();
 
         for (Competence competence : sesCompetences) {
             posts.addAll( competence.getPosts());
