@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -11,11 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data @AllArgsConstructor @NoArgsConstructor
+ @AllArgsConstructor @NoArgsConstructor
 @DiscriminatorValue("APPR")
 public class Apprenti extends Utilisateur{
+
     @OneToMany(mappedBy = "apprenti")
-    List<Post> posts = new ArrayList<Post>();
+   @JsonIgnore
+    private List<Post> posts = new ArrayList<Post>();
 
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
 
+    public List<Post> getPosts() {
+        return posts;
+    }
 }
